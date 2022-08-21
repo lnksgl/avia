@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: flight-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/avia-flight
+    username: postgres
+    password: postgre
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: 8077
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7072/eureka/
+  instance: localhost

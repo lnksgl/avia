@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: cloud-gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates: Path=/auth/**
+          filters: JwtAuthFilter
+#        - id: admin_service
+#          uri: lb://admin_service
+#          predicates: path=/models/**
+
+server:
+  port: 6968
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:7072/eureka
+  instance: localhost

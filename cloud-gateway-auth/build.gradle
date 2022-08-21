@@ -1,0 +1,74 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.2'
+	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+	id 'java'
+	id "com.google.protobuf" version "0.8.19"
+}
+
+group = 'avia'
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	cloud_version = '3.1.3'
+	jjwt_version = '0.11.5'
+	protobuf_version = '3.21.2'
+	grpc_version = '1.47.0'
+	grpc_server_version = '2.13.1.RELEASE'
+	mapstruct_version = '1.5.2.Final'
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${cloud_version}"
+
+	implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+
+	implementation "io.grpc:grpc-netty:${grpc_version}"
+	implementation("net.devh:grpc-client-spring-boot-starter:${grpc_server_version}") {
+		exclude group: 'io.grpc', module: 'grpc-netty-shaded'
+	}
+	implementation 'net.devh:grpc-client-spring-boot-starter:2.13.1.RELEASE'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation "io.jsonwebtoken:jjwt-api:${jjwt_version}"
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwt_version}"
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwt_version}"
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:${protobuf_version}"
+	}
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:${grpc_version}"
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}

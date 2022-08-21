@@ -1,0 +1,14 @@
+syntax = "proto3";
+package avia;
+
+message LoginRequest {
+  string username = 1;
+}
+
+message LoginResponse {
+  string password = 1;
+}
+
+service AuthLoginService {
+  rpc login(LoginRequest) returns (LoginResponse);
+}

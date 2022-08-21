@@ -1,0 +1,17 @@
+syntax = "proto3";
+package avia;
+
+message SignupRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  int64 city = 4;
+}
+
+message SignupResponse {
+  bool result = 1;
+}
+
+service AuthSignupService {
+  rpc signup(SignupRequest) returns (SignupResponse);
+}
